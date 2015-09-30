@@ -24,14 +24,12 @@ def logistic_grad(f, y):
 
 
 #Reassigning the parameters
-sigma_f = model_params.sigma_f
-sigma_l = model_params.sigma_l
-l = model_params.l
+sigma_l = model_params.noise_var
 density = common_params.density
 x0, x1 = common_params.x0, common_params.x1
 d, n = common_params.d, common_params.n
 m = np.vectorize(lambda x: 0)
-K = squared_exponential_cov(sigma_f, sigma_l, l)
+K = model_params.cov_func
 
 #Generating Grid
 x1_grid = np.linspace(x0, x1, density) #.reshape((1, density))

@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from covariance_functions import delta, squared_exponential_cov, covariance_mat
+from covariance_functions import delta, squared_exponential_cov, covariance_mat, gamma_exponential_cov
 from class_parameters import data_params, common_params
 
 
@@ -23,14 +23,11 @@ def sigmoid(x):
     return 1.0 / (1.0 + np.exp(- x))
 
 #Reassigning the parameters
-sigma_f = data_params.sigma_f
-sigma_l = data_params.sigma_l
-l = data_params.l
 density = common_params.density
 x0, x1 = common_params.x0, common_params.x1
 d, n = common_params.d, common_params.n
 m = (lambda x: 0)
-K = squared_exponential_cov(sigma_f, sigma_l, l)
+K = data_params.cov_func
 
 #Producing data
 x_g = x0 + np.random.rand(d, n)*(x1 - x0)

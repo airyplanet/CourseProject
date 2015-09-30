@@ -15,7 +15,7 @@ class Problem:
         self.w0, self.true_loss = starting_point, solution_loss
         self.oracle = oracle_function
 
-def full_gradient_descent(prb, max_iter=1000, max_time=np.inf, freq=5):
+def full_gradient_descent(prb, grad_eps=0 ,max_iter=1000, max_time=np.inf, freq=5):
     """
     :param prb: Problem class object
     :param max_iter: maximum number of iterations
@@ -61,15 +61,16 @@ def full_gradient_descent(prb, max_iter=1000, max_time=np.inf, freq=5):
     step_rule = armiho
     step = 1
     loss, gradient = oracle(w)
-    while (iteration_counter < max_iter) and (time.clock() - start < max_time):
+    while ((iteration_counter < max_iter) and (time.clock() - start < max_time)
+           and (np.linalg.norm(gradient) > grad_eps)):
         if iteration_counter % freq == 0:
             point_vec.append(w)
             time_vec.append(time.clock() - start)
             loss_vec.append(loss)
             print("FG Iteration ", iteration_counter)
-            print(step, np.linalg.norm(gradient), w)
+            print(np.linalg.norm(gradient))
             # print(w)
-        step = 10e-4#step_rule(w, step)
+        step = step_rule(w, step)
         w_new = w - step * gradient
         # while (w_new <= 0).any():
         #     step *= a_theta
